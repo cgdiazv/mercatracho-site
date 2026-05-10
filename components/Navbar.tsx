@@ -12,25 +12,47 @@ const categories = [
 export default function Navbar() {
   return (
     <nav className="bg-white sticky top-0 z-50 border-b border-[#ebf0f6]">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-8 relative min-h-[120px]">
-        <Link href="/">
-          <Image src="/logo.png" alt="mercatracho" width={80} height={20} className="h-5 w-auto object-contain" priority />
-        </Link>
-        <div className="hidden md:flex flex-col items-center gap-3 absolute left-1/2 -translate-x-1/2">
-          <div className="w-[800px]">
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        
+        {/* FILA PRINCIPAL */}
+        <div className="flex items-start justify-between gap-10">
+          
+          {/* Logo - Incrementado un 5% */}
+          <Link href="/" className="flex-shrink-0 mt-[7px]">
+            <Image 
+              src="/logo.png" 
+              alt="mercatracho" 
+              width={105} // De 100 a 105
+              height={26} 
+              className="h-[1.3rem] w-auto object-contain" // Ajuste fino de altura
+              priority 
+            />
+          </Link>
+
+          {/* Bloque Central: Buscador + Enlaces */}
+          <div className="flex-grow max-w-[900px]">
             <input 
               type="text" 
-              placeholder="Buscar..." 
-              className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2.5 px-5 text-base focus:outline-none focus:border-[#2175eb] focus:ring-1 focus:ring-[#2175eb]" 
+              placeholder="Buscar noticias..." 
+              className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2.5 px-6 text-[15px] focus:outline-none focus:border-[#2175eb] focus:ring-1 focus:ring-[#2175eb] transition-all" 
             />
+            
+            {/* ENLACES: Alineados a la izquierda del buscador */}
+            <div className="mt-4 flex gap-8 pl-2">
+              {categories.map(cat => (
+                <Link 
+                  key={cat.slug} 
+                  href={`/${cat.slug}`} 
+                  className="font-bold text-[12px] tracking-normal text-[#222222] uppercase hover:text-[#2175eb] transition-colors"
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
           </div>
-          <div className="flex gap-6">
-            {categories.map(cat => (
-              <a key={cat.slug} href={`/${cat.slug}`} className="font-medium text-[12px] leading-[18px] text-[#222222] uppercase hover:text-[#2175eb]">
-                {cat.name}
-              </a>
-            ))}
-          </div>
+
+          {/* Espacio para equilibrio */}
+          <div className="hidden md:block w-[105px]"></div>
         </div>
       </div>
     </nav>
