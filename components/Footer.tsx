@@ -12,26 +12,26 @@ export default function Footer() {
           
           {/* Columna 1 */}
           <div className="flex flex-col space-y-3">
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Memebresías</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Beneficios Mercatracho</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Productos y Servicios</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Apoyo a la Comunidad</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Memebresías</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Beneficios Mercatracho</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Productos y Servicios</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Apoyo a la Comunidad</Link>
           </div>
 
           {/* Columna 2 */}
           <div className="flex flex-col space-y-3">
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Empleos</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Acerca de Mercatracho</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Centro de Prensa</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Contáctenos</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Empleos</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Acerca de Mercatracho</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Centro de Prensa</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Contáctenos</Link>
           </div>
 
           {/* Columna 3 */}
           <div className="flex flex-col space-y-3">
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Tu Cuenta</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Perfil de Usuario</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Órdenes Recientes</Link>
-            <Link href="#" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">Tus Direcciones</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tu Cuenta</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Perfil de Usuario</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Órdenes Recientes</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tus Direcciones</Link>
           </div>
         </div>
 
