@@ -21,18 +21,20 @@ export default function NewsCard({ article, categoryName }: { article: any, cate
 
   // --- EXTRACCIÓN DE CATEGORÍA ---
   const getAutoCategory = () => {
-    // 1. Si pasaste la categoría desde el page.tsx (nacionales, deportes, etc.)
-    if (categoryName) return categoryName;
-    
-    // 2. Si no, buscar en las categorías de Inoreader
+    // 1. Si el padre (NewsList) manda una categoría (ej. en la página /deportes), manda esa.
+    if (categoryName && categoryName !== "") return categoryName;
+
+    // 2. Si no hay categoría del padre (como en la Portada), buscamos el "label" del JSON.
     const categories = article.categories || [];
     const folderTag = categories.find((cat: string) => cat.includes('label/'));
     
     if (folderTag) {
-      return folderTag.split('/').pop() || "Nacionales";
+      // Extrae la última parte de "user/xxx/label/Deportes" -> "Deportes"
+      return folderTag.split('/').pop();
     }
-    
-    return "Nacionales"; // Fallback seguro que SI existe en tu lib/urls.ts
+
+    // 3. Si no hay nada de lo anterior, por defecto es Nacionales
+    return "Nacionales";
   };
 
   const displayCategory = getAutoCategory();
@@ -122,7 +124,7 @@ export default function NewsCard({ article, categoryName }: { article: any, cate
           {/* Footer */}
           <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
             <span className="text-gray-400 text-[10px] uppercase font-bold tracking-tighter">
-              {article.author || "Redacción"}
+              {article.author || "RSS Feed"}
             </span>
             <span className="text-[#2175eb] text-[10px] uppercase tracking-widest font-black">
                {article._feed_title || "Mercatracho"}
