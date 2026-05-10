@@ -1,32 +1,77 @@
 // app/[category]/page.tsx
 import { CATEGORY_URLS } from '../lib/urls';
-import NewsCard from '@/components/NewsCard';
+import NewsList from '@/components/NewsList';
 
-async function getNews(category: string) {
-  const url = CATEGORY_URLS[category];
-  
-  if (!url) return []; // Si la categoría no existe, devuelve vacío
-
-  const res = await fetch(url, { next: { revalidate: 600 } });
-  const data = await res.json();
-  return data.items;
+// Tipado para Next.js 15
+interface CategoryParams {
+  params: Promise<{ category: string }>;
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
-  const { category } = params;
-  const articles = await getNews(category);
+async function getCategoryData(categoryKey: string) {
+  const url = CATEGORY_URLS[categoryKey];
+  
+  if (!url) return null;
+
+  try {
+    const res = await fetch(url, { 
+      next: { revalidate: 21600 } 
+    });
+
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (error) {
+    console.error("Error cargando categoría:", error);
+    return null;
+  }
+}
+
+export default async function CategoryPage({ params }: CategoryParams) {
+  const resolvedParams = await params;
+  const categoryKey = resolvedParams.category.toLowerCase();
+  
+  const data = await getCategoryData(categoryKey);
+
+  if (!data) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-20 text-center">
+        <h1 className="text-2xl font-bold text-gray-800">Sección no encontrada</h1>
+        <p className="text-gray-500 mt-2">La categoría "{categoryKey}" no está configurada.</p>
+      </div>
+    );
+  }
+
+  const getDisplayName = (url: string) => {
+    if (!url) return categoryKey;
+    const cleanUrl = url.replace(/\\/g, ''); 
+    const parts = cleanUrl.split('/');
+    const index = parts.findIndex(p => p === 'tag' || p === 'label');
+    return index !== -1 ? decodeURIComponent(parts[index + 1]) : categoryKey;
+  };
+
+  const displayName = getDisplayName(data.feed_url);
 
   return (
-    <main className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold uppercase mb-6 border-b-4 border-blue-900 inline-block">
-        {category}
-      </h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {articles.map((article: any) => (
-          <NewsCard key={article.id} article={article} />
-        ))}
-      </div>
+    <main className="max-w-7xl mx-auto px-6 py-6">
+      {/* Header Compacto */}
+      <header className="mb-6 pt-4 border-b border-gray-100 pb-4">
+        <div className="flex items-center gap-3">
+           <div className="w-1.5 h-6 bg-[#2175eb] rounded-full" />
+           <h1 className="text-3xl font-black uppercase tracking-tighter text-[#222222]">
+            {displayName}
+          </h1>
+        </div>
+        <p className="text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em] ml-4.5 mt-1">
+          Mercatracho {displayName}
+        </p>
+      </header>
+
+      {/* Lista de noticias con botón de cargar más */}
+      <NewsList 
+        initialArticles={data.items || []} 
+        initialContinuation={data.continuation || ""}
+        categoryName={displayName}
+        categoryKey={categoryKey}
+      />
     </main>
   );
 }
