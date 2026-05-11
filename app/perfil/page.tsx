@@ -25,6 +25,7 @@ export default function PerfilPage() {
   }
 
   const userInitial = session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U';
+  const userImage = session?.user?.image;
 
   return (
     <main className="min-h-screen bg-[#f5f6f7] pt-12 pb-16 px-4 md:px-6">
@@ -38,8 +39,17 @@ export default function PerfilPage() {
           
           {/* Tarjeta de Usuario */}
           <div className="bg-white rounded-[32px] p-8 border border-[#ebf0f6] shadow-sm flex flex-col md:flex-row items-center gap-6">
-            <div className="w-24 h-24 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-4xl font-black shadow-lg">
-              {userInitial}
+            <div className="w-24 h-24 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-4xl font-black shadow-lg overflow-hidden border-2 border-white">
+              {userImage ? (
+                <img 
+                  src={userImage} 
+                  alt={session?.user?.name || ""} 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                userInitial
+              )}
             </div>
             <div className="text-center md:text-left">
               <h2 className="text-2xl font-black text-[#222222] leading-tight">

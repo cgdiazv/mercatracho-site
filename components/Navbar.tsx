@@ -39,6 +39,8 @@ export default function Navbar() {
 
   // Obtenemos la inicial del nombre para el avatar
   const userInitial = session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U';
+  // Obtenemos la imagen de perfil de Google
+  const userImage = session?.user?.image;
 
   return (
     <>
@@ -69,8 +71,12 @@ export default function Navbar() {
             {/* BOTÓN DINÁMICO REAL */}
             {status === "authenticated" ? (
               <Link href="/perfil" className="flex items-center gap-2 text-[#2175eb] py-2 px-3 mt-[4px] hover:opacity-80 transition-opacity">
-                <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm">
-                  {userInitial}
+                <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm overflow-hidden border border-[#ebf0f6]">
+                  {userImage ? (
+                    <img src={userImage} alt={session.user?.name || ""} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    userInitial
+                  )}
                 </div>
                 <span className="text-[11px] font-black uppercase tracking-tight">Mi Cuenta</span>
               </Link>
@@ -88,8 +94,12 @@ export default function Navbar() {
               <div className="flex items-center">
                 <Link href={status === "authenticated" ? "/perfil" : "/login"} className="p-2 text-[#222222]" aria-label="Ingresar">
                    {status === "authenticated" ? (
-                     <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm">
-                       {userInitial}
+                     <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm overflow-hidden border border-[#ebf0f6]">
+                       {userImage ? (
+                         <img src={userImage} alt={session.user?.name || ""} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                       ) : (
+                         userInitial
+                       )}
                      </div>
                    ) : <UserIcon />}
                 </Link>

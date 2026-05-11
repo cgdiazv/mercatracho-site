@@ -15,21 +15,21 @@ export default function Footer() {
             <Link href="/membresia" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Memebresías</Link>
             <Link href="/anunciate" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Anunciate</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Productos y Servicios</Link>
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Apoyo a la Comunidad</Link>
+            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Centro de Prensa</Link>
           </div>
 
           {/* Columna 2 */}
           <div className="flex flex-col space-y-3">
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Empleos</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Acerca de Mercatracho</Link>
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Centro de Prensa</Link>
+            <Link href="/privacidad" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Política de Privacidad</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Contáctenos</Link>
           </div>
 
           {/* Columna 3 */}
           <div className="flex flex-col space-y-3">
             <Link href="/perfil" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tu Cuenta</Link>
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Perfil de Usuario</Link>
+            <Link href="/perfil/editar" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Editar Perfil</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Órdenes Recientes</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tus Direcciones</Link>
           </div>

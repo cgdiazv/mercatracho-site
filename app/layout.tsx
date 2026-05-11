@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Providers } from "./providers"; // Importación del nuevo wrapper
+import { Providers } from "./providers";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -15,6 +15,12 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "Mercatracho | Noticias de Honduras",
   description: "Claridad y precisión en información nacional, deportes y economía.",
+  // --- CAMBIO AQUÍ: AGREGANDO ICONOS ---
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
