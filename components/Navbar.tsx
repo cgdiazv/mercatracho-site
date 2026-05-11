@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from "next-auth/react";
 
 // Iconos
 const MenuIcon = () => (
@@ -34,6 +35,10 @@ const categories = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session, status } = useSession();
+
+  // Obtenemos la inicial del nombre para el avatar
+  const userInitial = session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U';
 
   return (
     <>
@@ -61,18 +66,32 @@ export default function Navbar() {
               </div>
             </div>
 
-            <Link href="/login" className="flex items-center gap-2 text-[#222222] hover:text-[#2175eb] transition-colors py-2 px-3 mt-[4px]">
-              <UserIcon />
-              <span className="text-[11px] font-bold uppercase tracking-tight">Ingresar</span>
-            </Link>
+            {/* BOTÓN DINÁMICO REAL */}
+            {status === "authenticated" ? (
+              <Link href="/perfil" className="flex items-center gap-2 text-[#2175eb] py-2 px-3 mt-[4px] hover:opacity-80 transition-opacity">
+                <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm">
+                  {userInitial}
+                </div>
+                <span className="text-[11px] font-black uppercase tracking-tight">Mi Cuenta</span>
+              </Link>
+            ) : (
+              <Link href="/login" className="flex items-center gap-2 text-[#222222] hover:text-[#2175eb] transition-colors py-2 px-3 mt-[4px]">
+                <UserIcon />
+                <span className="text-[11px] font-black uppercase tracking-tight">Ingresar</span>
+              </Link>
+            )}
           </div>
 
           {/* --- VERSIÓN MÓVIL --- */}
           <div className="md:hidden flex flex-col py-4">
             <div className="flex items-center justify-between mb-4 relative min-h-[40px]">
               <div className="flex items-center">
-                <Link href="/login" className="p-2 text-[#222222]" aria-label="Ingresar">
-                  <UserIcon />
+                <Link href={status === "authenticated" ? "/perfil" : "/login"} className="p-2 text-[#222222]" aria-label="Ingresar">
+                   {status === "authenticated" ? (
+                     <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm">
+                       {userInitial}
+                     </div>
+                   ) : <UserIcon />}
                 </Link>
               </div>
 
@@ -117,12 +136,22 @@ export default function Navbar() {
                 key={cat.slug} 
                 href={`/${cat.slug}`} 
                 onClick={() => setIsOpen(false)}
-                // CAMBIO: Aumentado de text-[12px] a text-[16px] y padding py-5
                 className="px-8 py-5 font-bold text-[16px] uppercase tracking-[0.1em] text-[#222222] border-b border-gray-50 hover:bg-gray-50 hover:text-[#2175eb] transition-colors"
               >
                 {cat.name}
               </Link>
             ))}
+            
+            {/* Link adicional en el drawer para móvil si no está logueado */}
+            {status !== "authenticated" && (
+              <Link 
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="px-8 py-5 font-black text-[16px] uppercase tracking-[0.1em] text-[#2175eb] bg-blue-50/50 mt-4"
+              >
+                Ingresar
+              </Link>
+            )}
           </div>
         </div>
       </div>

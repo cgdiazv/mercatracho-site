@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Providers } from "./providers"; // Importación del nuevo wrapper
 import "./globals.css";
 
 const roboto = Roboto({
@@ -26,15 +27,17 @@ export default function RootLayout({
       lang="es"
       className={`${roboto.variable} h-full antialiased`}
     >
-      {/* Usamos roboto.className para asegurar que la fuente se aplique a todo el texto */}
       <body className={`${roboto.className} min-h-full flex flex-col bg-[#f5f6f7]`}>
-        <Navbar />
-        
-        <main className="flex-grow w-full">
-          {children}
-        </main>
+        {/* Providers envuelve a Navbar y children para que useSession funcione en todos lados */}
+        <Providers>
+          <Navbar />
+          
+          <main className="flex-grow w-full">
+            {children}
+          </main>
 
-        <Footer />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
