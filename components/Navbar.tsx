@@ -40,7 +40,7 @@ export default function Navbar() {
       <nav className="bg-white sticky top-0 z-50 border-b border-[#ebf0f6] shadow-sm">
         <div className="max-w-7xl mx-auto px-6">
           
-          {/* --- VERSIÓN DESKTOP (PC) --- */}
+          {/* --- VERSIÓN DESKTOP --- */}
           <div className="hidden md:flex items-start justify-between gap-10 py-6">
             <Link href="/" className="flex-shrink-0 mt-[10px]">
               <Image src="/logo.png" alt="mercatracho" width={105} height={26} className="h-[1.3rem] w-auto object-contain" priority />
@@ -67,10 +67,9 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* --- VERSIÓN MÓVIL (CELULAR) --- */}
+          {/* --- VERSIÓN MÓVIL --- */}
           <div className="md:hidden flex flex-col py-4">
             <div className="flex items-center justify-between mb-4 relative min-h-[40px]">
-              
               <div className="flex items-center">
                 <Link href="/login" className="p-2 text-[#222222]" aria-label="Ingresar">
                   <UserIcon />
@@ -97,7 +96,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* --- DRAWER (MENÚ LATERAL) --- */}
+      {/* --- DRAWER --- */}
       <div 
         className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={() => setIsOpen(false)}
@@ -106,7 +105,6 @@ export default function Navbar() {
           className={`fixed top-0 left-0 h-full w-[280px] bg-white shadow-2xl transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Cabecera del Drawer (Sin título, solo botón cerrar alineado a la derecha) */}
           <div className="flex items-center justify-end p-5 border-b border-gray-100">
             <button onClick={() => setIsOpen(false)} className="p-2 text-gray-500 hover:bg-gray-50 rounded-full">
               <CloseIcon />
@@ -119,7 +117,8 @@ export default function Navbar() {
                 key={cat.slug} 
                 href={`/${cat.slug}`} 
                 onClick={() => setIsOpen(false)}
-                className="px-6 py-4 font-bold text-[12px] uppercase tracking-widest text-[#222222] border-b border-gray-50 hover:bg-gray-50 hover:text-[#2175eb] transition-colors"
+                // CAMBIO: Aumentado de text-[12px] a text-[16px] y padding py-5
+                className="px-8 py-5 font-bold text-[16px] uppercase tracking-[0.1em] text-[#222222] border-b border-gray-50 hover:bg-gray-50 hover:text-[#2175eb] transition-colors"
               >
                 {cat.name}
               </Link>
