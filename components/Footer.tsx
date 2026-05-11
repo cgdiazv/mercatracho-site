@@ -12,8 +12,8 @@ export default function Footer() {
           
           {/* Columna 1 */}
           <div className="flex flex-col space-y-3">
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Memebresías</Link>
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Beneficios Mercatracho</Link>
+            <Link href="/membresia" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Memebresías</Link>
+            <Link href="/anunciate" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Anunciate</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Productos y Servicios</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Apoyo a la Comunidad</Link>
           </div>
