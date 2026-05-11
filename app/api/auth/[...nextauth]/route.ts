@@ -1,34 +1,60 @@
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { db } from "@/lib/firebaseAdmin";
+
+// --- EXPANSIÓN DE TIPOS PARA TYPESCRIPT ---
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id?: string | null;
+    } & DefaultSession["user"]
+  }
+}
 
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials) {
-        // AQUÍ CONECTAREMOS CON TU BASE DE DATOS LUEGO
-        // Por ahora, un usuario de prueba:
-        if (credentials?.email === "admin@mercatracho.com" && credentials?.password === "admin123") {
-          return { id: "1", name: "Carlos Diaz", email: "admin@mercatracho.com" };
-        }
-        return null;
-      }
-    })
   ],
+  callbacks: {
+    async signIn({ user }) {
+      if (!user.email) return false;
+
+      try {
+        await db.collection("users").doc(user.email).set({
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          lastLogin: new Date(),
+          role: "reader", 
+        }, { merge: true });
+
+        return true;
+      } catch (error) {
+        console.error("Error sincronizando con Firebase:", error);
+        return true; 
+      }
+    },
+
+    async session({ session, token }) {
+      // Ahora TypeScript reconocerá .id porque lo declaramos arriba
+      if (session.user) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
   pages: {
-    signIn: '/login', // Le decimos que nuestra página de login es la que creamos
+    signIn: '/login',
+    error: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
 });
 
 export { handler as GET, handler as POST };

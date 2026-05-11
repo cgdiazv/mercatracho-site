@@ -28,7 +28,7 @@ export default function Footer() {
 
           {/* Columna 3 */}
           <div className="flex flex-col space-y-3">
-            <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tu Cuenta</Link>
+            <Link href="/perfil" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tu Cuenta</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Perfil de Usuario</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Órdenes Recientes</Link>
             <Link href="#" className="text-gray-400 hover:text-[#2175eb] text-sm transition-colors">Tus Direcciones</Link>

@@ -75,9 +75,11 @@ export default function PerfilPage() {
           <div className="bg-white rounded-[32px] p-8 border border-[#ebf0f6] shadow-sm">
              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-6">Configuración</h3>
              <div className="space-y-4">
-                <button className="w-full text-left py-2 text-sm font-bold text-gray-700 hover:text-[#2175eb] transition-colors">
-                  Editar información personal
-                </button>
+                <Link 
+                    href="/perfil/editar" className="w-full text-left py-2 text-sm font-bold text-gray-700 hover:text-[#2175eb] transition-colors block"
+                >
+                    Editar información personal
+                </Link>
                 <button className="w-full text-left py-2 text-sm font-bold text-gray-700 hover:text-[#2175eb] transition-colors">
                   Historial de pagos
                 </button>
