@@ -1,7 +1,10 @@
 // lib/firebase.ts
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, setLogLevel } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
+// Configuración de Firebase utilizando las variables de entorno de Next.js.
+// Estas variables deben estar definidas tanto en tu .env.local 
+// como en el panel de Environment Variables de Vercel.
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,10 +14,10 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// Inicialización de la aplicación (Singleton pattern para evitar múltiples instancias en desarrollo)
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-// Esta línea ahora funcionará porque ya importamos la función arriba
-setLogLevel('debug');
+// Inicialización de la base de datos Firestore
+const db = getFirestore(app);
 
 export { db };
