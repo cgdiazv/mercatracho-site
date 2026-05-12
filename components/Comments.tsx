@@ -29,13 +29,20 @@ export default function Comments({ articleId }: { articleId: string }) {
       orderBy('createdAt', 'desc')
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
-      }));
-      setComments(docs);
-    });
+    const unsubscribe = onSnapshot(q, 
+  (snapshot) => {
+    console.log("Datos recibidos de Firestore:", snapshot.size);
+    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setComments(docs);
+  },
+  (error) => {
+    // ESTO MOSTRARÁ EL ERROR EN LA CONSOLA SÍ O SÍ
+    console.error("ERROR CRÍTICO DE FIRESTORE:", error.code, error.message);
+    if (error.message.includes('index')) {
+      console.log("BUSCA EL LINK AQUÍ ABAJO PARA EL ÍNDICE");
+    }
+  }
+);
 
     return () => unsubscribe();
   }, [articleId]);
