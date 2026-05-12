@@ -1,26 +1,53 @@
-// app/login/page.tsx
 'use client';
 
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   // Función para manejar el login con Google
   const handleGoogleLogin = () => {
     signIn('google', { callbackUrl: '/' });
   };
 
-  // Función para manejar el login con credenciales (opcional por ahora)
+  // Función para manejar el login con credenciales (Email/Password)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Aquí se llamaría a signIn('credentials', { email, password, callbackUrl: '/' })
-    // Por ahora lo dejamos preparado para tu futura lógica de BD
-    setLoading(false);
+    setError('');
+
+    // Extraemos los datos del formulario de forma segura
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      // Llamada a NextAuth con el proveedor "credentials"
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false, // Evita recarga automática para manejar el error aquí
+      });
+
+      if (result?.error) {
+        // Personaliza el mensaje según el error devuelto por el authorize de route.ts
+        setError('Correo o contraseña incorrectos. Por favor, verifica tus datos.');
+        setLoading(false);
+      } else {
+        // Login exitoso: Redirigir y refrescar el estado de la sesión
+        router.push('/');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error("Error durante el inicio de sesión:", err);
+      setError('Ocurrió un problema técnico. Intenta más tarde.');
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,9 +65,17 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Alerta de Error (Solo aparece si hay un error) */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-[11px] font-black uppercase tracking-wider rounded-2xl text-center">
+              {error}
+            </div>
+          )}
+
           {/* Opciones de Login Social */}
           <div className="space-y-3 mb-8">
             <button 
+              type="button"
               onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-3 py-4 border-2 border-[#ebf0f6] rounded-2xl font-bold text-sm text-[#222222] hover:bg-gray-50 transition-all active:scale-[0.98]"
             >
@@ -76,7 +111,9 @@ export default function LoginPage() {
             <div>
               <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 ml-1 flex justify-between">
                 Contraseña
-                <Link href="#" className="text-[#2175eb] lowercase tracking-normal font-bold hover:underline">¿Olvidaste tu contraseña?</Link>
+                <Link href="/recuperar-clave" className="text-[#2175eb] lowercase tracking-normal font-bold hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </Link>
               </label>
               <input 
                 name="password"
@@ -87,19 +124,20 @@ export default function LoginPage() {
               />
             </div>
 
+            {/* Este botón ahora disparará el handleSubmit por ser type="submit" */}
             <button 
               type="submit"
               disabled={loading}
-              className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] bg-[#222222] text-white hover:bg-[#2175eb] transition-all shadow-xl shadow-gray-200 mt-4 active:scale-[0.98] disabled:bg-gray-400"
+              className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] bg-[#222222] text-white hover:bg-[#2175eb] transition-all shadow-xl shadow-gray-200 mt-4 active:scale-[0.98] disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {loading ? 'Cargando...' : 'Entrar a mi cuenta'}
+              {loading ? 'Verificando...' : 'Entrar a mi cuenta'}
             </button>
           </form>
 
           {/* Call to Action para Membresía */}
           <p className="text-center mt-10 text-gray-400 text-sm font-medium">
             ¿No tienes cuenta?{' '}
-            <Link href="/membresia" className="text-[#2175eb] font-black hover:underline">
+            <Link href="/registro" className="text-[#2175eb] font-black hover:underline">
               Suscríbete aquí
             </Link>
           </p>
