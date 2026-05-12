@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 
 // Iconos
 const MenuIcon = () => (
@@ -24,6 +25,13 @@ const CloseIcon = () => (
   </svg>
 );
 
+// Icono de Borrar (X pequeña)
+const ClearIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+  </svg>
+);
+
 const categories = [
   { name: 'Nacionales', slug: 'nacionales' },
   { name: 'Deportes', slug: 'deportes' },
@@ -35,11 +43,22 @@ const categories = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
   const { data: session, status } = useSession();
 
-  // Obtenemos la inicial del nombre para el avatar
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim() !== "") {
+      router.push(`/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsOpen(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
+
   const userInitial = session?.user?.name ? session.user.name.charAt(0).toUpperCase() : 'U';
-  // Obtenemos la imagen de perfil de Google
   const userImage = session?.user?.image;
 
   return (
@@ -54,11 +73,27 @@ export default function Navbar() {
             </Link>
 
             <div className="flex-grow max-w-[900px]">
-              <input 
-                type="text" 
-                placeholder="Buscar noticias..." 
-                className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2.5 px-6 text-[15px] focus:outline-none focus:border-[#2175eb] transition-all" 
-              />
+              {/* Contenedor relativo para posicionar la X */}
+              <div className="relative w-full group">
+                <input 
+                  type="text" 
+                  placeholder="Buscar noticias..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
+                  className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2.5 px-6 pr-12 text-[15px] focus:outline-none focus:border-[#2175eb] transition-all" 
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={clearSearch}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Borrar búsqueda"
+                  >
+                    <ClearIcon />
+                  </button>
+                )}
+              </div>
+              
               <div className="mt-4 flex gap-8 pl-2">
                 {categories.map(cat => (
                   <Link key={cat.slug} href={`/${cat.slug}`} className="font-bold text-[11px] tracking-widest text-[#222222] uppercase hover:text-[#2175eb] transition-colors">
@@ -68,7 +103,6 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* BOTÓN DINÁMICO REAL */}
             {status === "authenticated" ? (
               <Link href="/perfil" className="flex items-center gap-2 text-[#2175eb] py-2 px-3 mt-[4px] hover:opacity-80 transition-opacity">
                 <div className="w-7 h-7 bg-[#2175eb] rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm overflow-hidden border border-[#ebf0f6]">
@@ -118,8 +152,24 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="w-full">
-              <input type="text" placeholder="Buscar noticias..." className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2 px-5 text-[14px] focus:outline-none" />
+            <div className="w-full relative">
+              <input 
+                type="text" 
+                placeholder="Buscar noticias..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
+                className="w-full bg-[#f5f6f7] border border-[#ebf0f6] rounded-full py-2 px-5 pr-10 text-[14px] focus:outline-none" 
+              />
+              {searchQuery && (
+                <button 
+                  onClick={clearSearch}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  aria-label="Borrar búsqueda"
+                >
+                  <ClearIcon />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -152,7 +202,6 @@ export default function Navbar() {
               </Link>
             ))}
             
-            {/* Link adicional en el drawer para móvil si no está logueado */}
             {status !== "authenticated" && (
               <Link 
                 href="/login"
