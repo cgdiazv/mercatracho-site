@@ -101,8 +101,12 @@ function ResetPasswordForm() {
   );
 }
 
-// Next.js requiere Suspense para usar useSearchParams en componentes de cliente
 export default function ResetPasswordPage() {
   return (
     <main className="min-h-screen bg-[#f5f6f7] flex items-start justify-center p-4 pt-8 md:pt-12">
-      <Suspense fallback={
+      <Suspense fallback={<div className="text-gray-400 font-bold uppercase text-[10px]">Cargando...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
+    </main>
+  );
+}
