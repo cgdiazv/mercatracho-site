@@ -1,6 +1,6 @@
-// app/[category]/[slug]/page.tsx
 import { CATEGORY_URLS } from '@/app/lib/urls';
 import Link from 'next/link';
+import Comments from '@/components/Comments';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -69,11 +69,6 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
   }
 
   return (
-    /**
-     * AJUSTE DE ALTURA DESKTOP:
-     * pt-12 para móvil (compacto).
-     * md:pt-16 para escritorio (sube el contenido comparado con el pt-32 anterior).
-     */
     <main className="min-h-screen bg-[#f5f6f7] pt-5 md:pt-10 pb-16 px-4 md:px-6">
       
       <article className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#ebf0f6] overflow-hidden">
@@ -95,7 +90,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-[#2175eb] rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner">
-              M
+              {article.author ? article.author[0] : 'M'}
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-wider text-gray-900 leading-none mb-1">
@@ -114,7 +109,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
             <img 
               src={mainImage} 
               alt={article.title}
-              className="w-full h-auto object-cover max-h-[600px] w-full"
+              className="w-full h-auto object-cover max-h-[600px]"
             />
           </div>
         )}
@@ -128,6 +123,10 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
               prose-a:text-[#2175eb] prose-a:font-bold prose-strong:text-[#222222]"
             dangerouslySetInnerHTML={{ __html: bodyContent }}
           />
+
+          {/* SECCIÓN DE COMENTARIOS */}
+          {/* Pasamos el ID del artículo para filtrar los comentarios en Firestore */}
+          <Comments articleId={resolvedSearchParams.id} />
 
           <footer className="mt-12 pt-10 border-t border-gray-100 flex flex-col items-center">
             <Link href="/" className="text-[#2175eb] font-black text-[11px] uppercase tracking-[0.2em] hover:opacity-70 transition-opacity">
