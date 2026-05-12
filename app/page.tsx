@@ -68,7 +68,7 @@ export default async function HomePage() {
       <NewsList 
         initialArticles={articles} 
         initialContinuation="" 
-        categoryName="" 
+        categoryName="Home"
         categoryKey="" 
       />
     </main>
