@@ -1,12 +1,18 @@
 import { CATEGORY_URLS } from '@/app/lib/urls';
 import Link from 'next/link';
+import { Metadata } from 'next';
 import Comments from '@/components/Comments';
+import ShareMenu from '@/components/ShareMenu';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
   searchParams: Promise<{ id: string }>;
 }
 
+/**
+ * Función centralizada para obtener el artículo.
+ * Se usa tanto para renderizar la página como para generar los metadatos.
+ */
 async function getArticle(categoryKey: string, articleId: string) {
   const key = categoryKey.toLowerCase();
   const decodedId = decodeURIComponent(articleId).trim();
@@ -31,6 +37,54 @@ async function getArticle(categoryKey: string, articleId: string) {
   return null;
 }
 
+/**
+ * GENERACIÓN DE METADATA (SEO)
+ */
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  
+  if (!resolvedSearchParams.id) return { title: 'Mercatracho' };
+
+  const article = await getArticle(resolvedParams.category, resolvedSearchParams.id);
+
+  if (!article) return { title: 'Noticia no encontrada | Mercatracho' };
+
+  // Limpiamos el resumen de etiquetas HTML para la descripción SEO
+  const description = (article.summary?.content || article.content_html || '')
+    .replace(/<[^>]*>?/gm, '')
+    .substring(0, 160);
+
+  const mainImage = article.visual?.url || article.attachments?.[0]?.url || '/logo-mercatracho.png';
+
+  return {
+    title: `${article.title} | Mercatracho`,
+    description: description,
+    openGraph: {
+      title: article.title,
+      description: description,
+      url: `https://mercatracho.com/${resolvedParams.category}/${resolvedParams.slug}?id=${resolvedSearchParams.id}`,
+      siteName: 'Mercatracho',
+      images: [
+        {
+          url: mainImage,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
+      locale: 'es_HN',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: description,
+      images: [mainImage],
+    },
+  };
+}
+
 function formatDate(article: any) {
   const rawDate = article.published || article.updated || article.date_published;
   if (!rawDate) return '';
@@ -44,6 +98,9 @@ function formatDate(article: any) {
   }).format(date);
 }
 
+/**
+ * COMPONENTE PRINCIPAL DE LA PÁGINA
+ */
 export default async function ArticlePage({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
@@ -68,15 +125,16 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
     bodyContent = bodyContent.replace(/<img[^>]*>/, '');
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const shareUrl = `${baseUrl}/${resolvedParams.category}/${resolvedParams.slug}?id=${encodeURIComponent(resolvedSearchParams.id)}`;
+
   return (
     <main className="min-h-screen bg-[#f5f6f7] pt-5 md:pt-10 pb-16 px-4 md:px-6">
-      
       <article className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#ebf0f6] overflow-hidden">
         
-        {/* Encabezado */}
         <header className="p-6 md:p-12 pb-6">
           <div className="flex items-center gap-3 mb-6">
-            <span className="bg-[#2175eb] text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-md shadow-sm">
+            <span className="bg-[#2175eb] text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-md shadow-sm tracking-widest">
               {resolvedParams.category}
             </span>
             <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">
@@ -88,22 +146,25 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
             {article.title}
           </h1>
 
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#2175eb] rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner">
-              {article.author ? article.author[0] : 'M'}
+          <div className="flex items-center justify-between border-b border-gray-50 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#2175eb] rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner">
+                {article.author ? article.author[0] : 'M'}
+              </div>
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-wider text-gray-900 leading-none mb-1">
+                  {article.author || 'Redacción Mercatracho'}
+                </p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase leading-none">
+                  {article.origin?.title || 'Fuente RSS'}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-[11px] font-black uppercase tracking-wider text-gray-900 leading-none mb-1">
-                {article.author || 'Redacción Mercatracho'}
-              </p>
-              <p className="text-[10px] text-gray-400 font-bold uppercase leading-none">
-                {article.origin?.title || 'Fuente RSS'}
-              </p>
-            </div>
+
+            <ShareMenu url={shareUrl} title={article.title} />
           </div>
         </header>
 
-        {/* Imagen Destacada */}
         {mainImage && (
           <div className="w-full bg-gray-100">
             <img 
@@ -114,18 +175,15 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           </div>
         )}
 
-        {/* Cuerpo de la Noticia */}
         <div className="p-6 md:p-12 pt-10">
           <div 
-            className="prose prose-lg max-w-none text-[#333333] leading-relaxed
+            className="prose prose-lg max-w-none text-[#333333] leading-relaxed mb-12
               prose-p:mb-6 prose-p:text-[18px] md:prose-p:text-lg
               prose-img:rounded-2xl prose-img:shadow-lg
               prose-a:text-[#2175eb] prose-a:font-bold prose-strong:text-[#222222]"
             dangerouslySetInnerHTML={{ __html: bodyContent }}
           />
 
-          {/* SECCIÓN DE COMENTARIOS */}
-          {/* Pasamos el ID del artículo para filtrar los comentarios en Firestore */}
           <Comments articleId={resolvedSearchParams.id} />
 
           <footer className="mt-12 pt-10 border-t border-gray-100 flex flex-col items-center">
