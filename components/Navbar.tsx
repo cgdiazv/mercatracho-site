@@ -68,8 +68,8 @@ export default function Navbar() {
           
           {/* --- VERSIÓN DESKTOP --- */}
           <div className="hidden md:flex items-start justify-between gap-10 py-6">
-            <Link href="/" className="flex-shrink-0 mt-[10px]">
-              <Image src="/logo.png" alt="mercatracho" width={105} height={26} className="h-[1.3rem] w-auto object-contain" priority />
+            <Link href="/" className="flex-shrink-0">
+              <Image src="/logo.webp" alt="mercatracho" width={210} height={52} priority />
             </Link>
 
             <div className="flex-grow max-w-[900px]">
