@@ -124,7 +124,7 @@ export default function EditarPerfilPage() {
             <button 
               type="submit"
               disabled={loading || isConfirmingDelete}
-              className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] bg-[#222222] text-white hover:bg-[#2175eb] transition-all shadow-xl shadow-gray-200 active:scale-[0.98] disabled:bg-gray-400"
+              className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] bg-[#222222] text-white hover:bg-[#2175eb] hover:cursor-pointer transition-all shadow-xl shadow-gray-200 active:scale-[0.98] disabled:bg-gray-400"
             >
               {loading ? 'Guardando...' : 'Guardar Cambios'}
             </button>
@@ -137,7 +137,7 @@ export default function EditarPerfilPage() {
               <button 
                 type="button"
                 onClick={() => setIsConfirmingDelete(true)}
-                className="text-[11px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors"
+                className="text-[11px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 hover:cursor-pointer transition-colors"
               >
                 Eliminar mi cuenta
               </button>

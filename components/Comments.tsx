@@ -97,7 +97,7 @@ export default function Comments({ articleId }: { articleId: string }) {
             <button
               type="submit"
               disabled={loading || !comment.trim()}
-              className="bg-[#2175eb] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#222222] transition-all disabled:opacity-50 shadow-lg shadow-blue-100"
+              className="bg-[#2175eb] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#222222] hover:cursor-pointer transition-all disabled:opacity-50 shadow-lg shadow-blue-100"
             >
               {loading ? 'Enviando...' : 'Publicar Comentario'}
             </button>
