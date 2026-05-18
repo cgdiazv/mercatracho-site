@@ -141,7 +141,7 @@ export default function Navbar() {
 
               <div className="absolute left-1/2 -translate-x-1/2">
                 <Link href="/">
-                  <Image src="/logo.png" alt="mercatracho" width={140} height={36} className="h-7 w-auto object-contain" priority />
+                  <Image src="/logo.webp" alt="mercatracho" width={180} height={45} className="h-10 w-auto object-contain" priority />
                 </Link>
               </div>
 
