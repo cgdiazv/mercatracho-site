@@ -49,7 +49,7 @@ export default function NewsCard({ article, categoryName }: { article: any, cate
     }
 
     // 3. Último recurso: Si nada coincide, se queda como Nacionales
-    return "Nacionales";
+    return "Últimas Noticias";
   };
 
   const displayCategory = getAutoCategory();
