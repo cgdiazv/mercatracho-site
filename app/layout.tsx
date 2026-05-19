@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
 import "./globals.css";
+import Script from "next/script";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -34,6 +35,22 @@ export default function RootLayout({
       className={`${roboto.variable} h-full antialiased`}
     >
       <body className={`${roboto.className} min-h-full flex flex-col bg-[#f5f6f7]`}>
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-CVPZ51XZ6L`}
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-CVPZ51XZ6L');
+            `,
+          }}
+        />
         {/* Providers envuelve a Navbar y children para que useSession funcione en todos lados */}
         <Providers>
           <Navbar />
