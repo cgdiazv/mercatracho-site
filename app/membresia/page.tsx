@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function MembresiaPage() {
   // CONFIGURACIÓN: Link de Stripe actualizado
-  const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/9B69AS8uj5A0dXg2Yl4Ni00";
+  const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/8x2bJ05i70fG4mGeH34Ni01";
 
   const beneficios = [
     { detalle: "Acceso ilimitado a noticias premium", basico: true, premium: true },
