@@ -55,7 +55,7 @@ export default function MembresiaPage() {
             
             <h2 className="text-2xl font-black text-[#222222] mb-2 uppercase tracking-tight">Premium Digital</h2>
             <div className="flex items-baseline gap-1 mb-6">
-              <span className="text-4xl font-black text-[#2175eb]">$5.99</span>
+              <span className="text-4xl font-black text-[#2175eb]">$1.99</span>
               <span className="text-gray-400 font-bold text-xs uppercase tracking-widest">/ mes</span>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed mb-8 flex-grow font-medium">
