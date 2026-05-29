@@ -47,7 +47,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     .replace(/<[^>]*>?/gm, '')
     .substring(0, 160);
 
-  const mainImage = article.visual?.url || article.attachments?.[0]?.url || `${baseUrl}/logo-mercatracho.png`;
+  const imageMatch = (article.content_html || "").match(/<img[^>]+src="([^">]+)"/);
+  const extractedImage = imageMatch ? imageMatch[1] : null;
+  const mainImage = article.visual?.url || article.attachments?.[0]?.url || extractedImage || `${baseUrl}/logo-mercatracho.png`;
 
   return {
     title: `${article.title} | Mercatracho`,
@@ -85,7 +87,9 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
   const article = await getArticle(resolvedParams.category, resolvedSearchParams.id);
   if (!article) return null;
 
-  const mainImage = article.visual?.url || article.attachments?.[0]?.url || null;
+  const imageMatch = (article.content_html || "").match(/<img[^>]+src="([^">]+)"/);
+  const extractedImage = imageMatch ? imageMatch[1] : null;
+  const mainImage = article.visual?.url || article.attachments?.[0]?.url || extractedImage || null;
   let bodyContent = article.content_html || article.content?.content || article.summary?.content || '';
 
   if (mainImage && bodyContent) {
