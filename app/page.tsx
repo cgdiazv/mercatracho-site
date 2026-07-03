@@ -8,16 +8,21 @@ async function getAllNews() {
   try {
     const requests = categoriesToMix.map(key => 
       fetch(CATEGORY_URLS[key], { next: { revalidate: 3600 } })
-        .then(res => res.json())
-        .catch(() => ({ items: [] }))
+        .then(res => res.json().then(data => ({ key, data })))
+        .catch(() => ({ key, data: { items: [] } }))
     );
 
     const results = await Promise.all(requests);
 
     let allArticles: any[] = [];
-    results.forEach(data => {
+    const continuations: Record<string, string> = {};
+
+    results.forEach(({ key, data }) => {
       if (data.items) {
         allArticles = [...allArticles, ...data.items];
+      }
+      if (data.continuation) {
+        continuations[key] = data.continuation;
       }
     });
 
@@ -27,15 +32,18 @@ async function getAllNews() {
       return dateB - dateA;
     });
 
-    return allArticles.slice(0, 45);
+    return {
+      articles: allArticles,
+      continuation: Object.keys(continuations).length > 0 ? JSON.stringify(continuations) : ""
+    };
   } catch (error) {
     console.error("Error mezclando noticias:", error);
-    return [];
+    return { articles: [], continuation: "" };
   }
 }
 
 export default async function HomePage() {
-  const articles = await getAllNews();
+  const { articles, continuation } = await getAllNews();
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-6">
@@ -67,9 +75,9 @@ export default async function HomePage() {
       {/* Listado de Noticias */}
       <NewsList 
         initialArticles={articles} 
-        initialContinuation="" 
+        initialContinuation={continuation} 
         categoryName="Home"
-        categoryKey="" 
+        categoryKey="home" 
       />
     </main>
   );
