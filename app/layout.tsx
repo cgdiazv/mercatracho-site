@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { Providers } from "./providers";
 import "./globals.css";
 import Script from "next/script";
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -35,6 +36,7 @@ export default function RootLayout({
       className={`${roboto.variable} h-full antialiased`}
     >
       <body className={`${roboto.className} min-h-full flex flex-col bg-[#f5f6f7]`}>
+        <ServiceWorkerRegister />
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=G-CVPZ51XZ6L`}
