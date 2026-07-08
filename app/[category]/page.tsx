@@ -1,6 +1,7 @@
 // app/[category]/page.tsx
 import { CATEGORY_URLS } from '../lib/urls';
 import NewsList from '@/components/NewsList';
+import Weather from '@/components/Weather';
 
 // Tipado para Next.js 15
 interface CategoryParams {
@@ -53,16 +54,23 @@ export default async function CategoryPage({ params }: CategoryParams) {
   return (
     <main className="max-w-7xl mx-auto px-6 py-6">
       {/* Header Compacto */}
-      <header className="mb-6 pt-4 border-b border-gray-100 pb-4">
-        <div className="flex items-center gap-3">
-           <div className="w-1.5 h-6 bg-[#2175eb] rounded-full" />
-           <h1 className="text-3xl font-black uppercase tracking-tighter text-[#222222]">
-            {displayName}
-          </h1>
+      <header className="mb-6 pt-4 border-b border-gray-100 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-y-4">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-6 bg-[#2175eb] rounded-full" />
+            <h1 className="text-3xl font-black uppercase tracking-tighter text-[#222222]">
+              {displayName}
+            </h1>
+          </div>
+          <p className="text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em] ml-4.5 mt-1">
+            Mercatracho {displayName}
+          </p>
         </div>
-        <p className="text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em] ml-4.5 mt-1">
-          Mercatracho {displayName}
-        </p>
+
+        <div className="flex items-center gap-2 ml-4.5 md:ml-0 md:self-center">
+          <Weather cityQuery="San Pedro Sula,HN" displayName="SPS" />
+          <Weather cityQuery="Tegucigalpa,HN" displayName="TGU" />
+        </div>
       </header>
 
       {/* Lista de noticias con botón de cargar más */}
